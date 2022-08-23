@@ -1,0 +1,6 @@
+
+.git
+Dockerfile*
+*.png
+*.md
+node_modules
