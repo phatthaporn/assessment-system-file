@@ -186,7 +186,7 @@ function AssessmentAll({ roleId }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{ diplay: "flex", flexDirection: "column" }}>
-          <Button
+          {/* <Button
             sx={{ mb: 1 }}
             color="success"
             variant="contained"
@@ -202,7 +202,7 @@ function AssessmentAll({ roleId }) {
             }}
           >
             copy path to clipboard
-          </Button>
+          </Button> */}
           <Button
             sx={{ mr: 1}}
             onClick={() => setOpenShare(false)}
