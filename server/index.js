@@ -10,7 +10,7 @@ const privateKey = fs.readFileSync(privateKeyPath, "utf8");
 //database
 const syncDatabase = require("./connection/sync-resync");
 const db = require("./models/index.model");
-syncDatabase(false, db);
+syncDatabase(true, db);
 
 app.use(express.json());
 app.use(cors());
