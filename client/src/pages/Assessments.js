@@ -78,7 +78,7 @@ function Assessment() {
 
   const sendCheckEmail = async () => {
     if(disableDetail === true) {
-      if (sendData?.detail !== "") {
+      if (sendData?.detail === "") {
         alert("กรุณากรอกข้อมูล");
         return;
       }
