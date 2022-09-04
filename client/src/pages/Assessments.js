@@ -78,8 +78,8 @@ function Assessment() {
 
   const sendCheckEmail = async () => {
     if(disableDetail === true) {
-      if (!isValidEmail(sendData?.email)) {
-        alert("กรุณากรอกอีเมลให้ถูกต้อง!");
+      if (sendData?.detail !== "") {
+        alert("กรุณากรอกข้อมูล");
         return;
       }
     }
@@ -232,7 +232,7 @@ function Assessment() {
                       size="small"
                       required
                       disabled={!disableDetail}
-                      label="อีเมล"
+                      label="ชื่อของคุณ"
                       fullWidth
                       variant="outlined"
                       onChange={(e) =>
