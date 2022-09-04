@@ -13,11 +13,13 @@ import {
 import { Box } from "@mui/system";
 import axios from "axios";
 import MUIDataTable from "mui-datatables";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useState, useEffect } from "react";
 import { hostname, hostURL } from "../hostname";
 import ShareIcon from "@mui/icons-material/Share";
 import Snackbar from "../utils/Snackbar";
 import QRCode from "react-qr-code";
+import DeleteDialog from "../components/assessment-setting/dialog-delete";
 
 function AssessmentAll({ roleId }) {
   const [assessment, setAssessment] = useState([]);
@@ -28,13 +30,14 @@ function AssessmentAll({ roleId }) {
     type: "",
     msg: "",
   });
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [deleteId, setDeleteId] = useState("");
 
   const getAssessment = async () => {
     try {
       const { data } = await axios.get(`${hostname}/api/assessment/get-all`);
       if (data.status === "success") {
         setAssessment(data.result);
-        console.log(data.result);
       }
     } catch (err) {
       console.log(err);
@@ -43,16 +46,38 @@ function AssessmentAll({ roleId }) {
 
   const setPublish = async (index) => {
     try {
-      const { data } = await axios.post(`${hostname}/api/assessment/set-publish/${assessment[index].id}`, {publish: !assessment[index].publish});
-      if(data.status === "success") {
+      const { data } = await axios.post(
+        `${hostname}/api/assessment/set-publish/${assessment[index].id}`,
+        { publish: !assessment[index].publish }
+      );
+      if (data.status === "success") {
         let items = [...assessment];
         items[index].publish = !items[index].publish;
         setAssessment(items);
       }
-    }catch(err) {
-      alert(err)
+    } catch (err) {
+      alert(err);
     }
-  }
+  };
+
+  const destroyAssessment = async () => {
+    try {
+      const { data } = await axios.delete(
+        `${hostname}/api/assessment/delete/${deleteId}`
+      );
+      if (data.status === "success") {
+        setOpenSnackbar({
+          status: true,
+          type: "success",
+          msg: "ลบแบบประเมินสำเร็จ",
+        });
+        setOpenDeleteDialog(false);
+        getAssessment();
+      }
+    } catch (err) {
+      alert(err);
+    }
+  };
 
   useEffect(() => {
     getAssessment();
@@ -61,12 +86,20 @@ function AssessmentAll({ roleId }) {
     <Box>
       <Box sm={{ display: "flex", flexDirection: "row", alignItems: "start" }}>
         <Breadcrumbs aria-label="breadcrumb">
-          <div>{roleId === "fbb84c66-5916-45bb-bc70-d1785fa5d14c" ? "แบบประเมินทั้งหมด" : "แบบประเมินของฉัน"}</div>
+          <div>
+            {roleId === "fbb84c66-5916-45bb-bc70-d1785fa5d14c"
+              ? "แบบประเมินทั้งหมด"
+              : "แบบประเมินของฉัน"}
+          </div>
         </Breadcrumbs>
       </Box>
       <Box justify="center" sx={{ p: { md: "10px" } }}>
         <MUIDataTable
-          title={roleId === "fbb84c66-5916-45bb-bc70-d1785fa5d14c" ? "แบบประเมินทั้งหมด" : "แบบประเมินของฉัน"}
+          title={
+            roleId === "fbb84c66-5916-45bb-bc70-d1785fa5d14c"
+              ? "แบบประเมินทั้งหมด"
+              : "แบบประเมินของฉัน"
+          }
           data={assessment}
           options={{
             viewColumns: false,
@@ -87,7 +120,13 @@ function AssessmentAll({ roleId }) {
               options: {
                 filter: true,
                 sort: false,
-                customBodyRenderLite: (index) => <Switch checked={assessment[index]?.publish} color="success" onClick={() => setPublish(index)} />,
+                customBodyRenderLite: (index) => (
+                  <Switch
+                    checked={assessment[index]?.publish}
+                    color="success"
+                    onClick={() => setPublish(index)}
+                  />
+                ),
               },
             },
             {
@@ -141,6 +180,10 @@ function AssessmentAll({ roleId }) {
                           setOpenShare(true);
                         }}
                       />
+                        <DeleteIcon sx={{ ml: 1, cursor: "pointer", fontSize: "25px" }} color="danger" onClick={() => {
+                          setDeleteId(element.id);
+                          setOpenDeleteDialog(true);
+                        }} />
                     </>
                   );
                 },
@@ -204,7 +247,7 @@ function AssessmentAll({ roleId }) {
             copy path to clipboard
           </Button> */}
           <Button
-            sx={{ mr: 1}}
+            sx={{ mr: 1 }}
             onClick={() => setOpenShare(false)}
             color="rmuti"
             variant="contained"
@@ -214,6 +257,11 @@ function AssessmentAll({ roleId }) {
           </Button>
         </DialogActions>
       </Dialog>
+      <DeleteDialog
+        deleteToggle={openDeleteDialog}
+        setDeleteToggle={setOpenDeleteDialog}
+        deleteFunction={destroyAssessment}
+      />
     </Box>
   );
 }

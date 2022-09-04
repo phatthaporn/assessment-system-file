@@ -137,6 +137,7 @@ const update = async (assessment, conditions, id) => {
 const destroy = async (id) => {
   try {
     await AssessmentConditions.destroy({ where: { assessmentId: id } });
+    await AssessmentHistories.destroy({ where: { assessmentId: id }});
     await Assessments.destroy({ where: { id: id } });
     return { status: "success", result: "Delete successfully." };
   } catch (err) {

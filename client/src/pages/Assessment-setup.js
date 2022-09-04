@@ -332,7 +332,10 @@ function CreateAssessment() {
                 variant="contained"
                 color="success"
                 disabled={
-                  addAssessment?.title === "" && addAssessment?.sub_title === "" || addAssessment?.sub_title === undefined || addAssessment?.title === undefined
+                  (addAssessment?.title === "" &&
+                    addAssessment?.sub_title === "") ||
+                  addAssessment?.sub_title === undefined ||
+                  addAssessment?.title === undefined
                 }
                 onClick={() => {
                   setConditions([
@@ -419,17 +422,19 @@ function CreateAssessment() {
                               <Edit fontSize="small" color="#FFFFFF" />
                               แก้ไขแบบประเมิน
                             </Button>
-
-                            {/* <IconButton size="large">
-                              <Delete
-                                fontSize="medium"
-                                color="danger"
-                                onClick={() => {
-                                  setDeleteId(rowData.id);
-                                  setOpenDeleteDialog(true);
-                                }}
-                              />
-                            </IconButton> */}
+                            <Button
+                              sx={{ ml: 1 }}
+                              size="small"
+                              color="danger"
+                              variant="contained"
+                              onClick={() => {
+                                setDeleteId(rowData.id);
+                                setOpenDeleteDialog(true);
+                              }}
+                            >
+                              <DeleteIcon fontSize="small" />
+                              ลบ
+                            </Button>
                           </>
                         );
                       },
