@@ -174,7 +174,7 @@ const saveAnswer = async (answer, detail, id) => {
       });
     });
     const result = await AssessmentHistories.create({
-      email: detail.detail === undefined ? "Unknown person" : detail.detail,
+      detail: detail.detail === undefined ? "Unknown person" : detail.detail,
       gender: detail.gender,
       age: detail.age,
       points: points,
