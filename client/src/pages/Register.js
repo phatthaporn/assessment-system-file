@@ -263,6 +263,7 @@ function Register() {
               <Button
                 onClick={onClickRegister}
                 variant="contained"
+                sx={{ boxShadow: 0, borderRadius: "3px" }}
                 color="rmuti"
                 fullWidth
               >
@@ -272,7 +273,7 @@ function Register() {
                 to="/login"
                 style={{ textDecoration: "none", width: "100%" }}
               >
-                <Button variant="contained" color="warning" fullWidth>
+                <Button variant="contained" sx={{ boxShadow: 0, borderRadius: "3px" }} color="warning" fullWidth>
                   ไปที่หน้าเข้าสู่ระบบ
                 </Button>
               </Link>

@@ -20,6 +20,7 @@ function DeleteDialog({ deleteToggle, setDeleteToggle, deleteFunction}) {
         onClick={() => deleteFunction()}
         color="danger"
         variant="contained"
+        sx={{ boxShadow: 0, borderRadius: "3px" }}
       >
         ตกลง
       </Button>

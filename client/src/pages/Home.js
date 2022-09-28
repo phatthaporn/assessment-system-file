@@ -212,7 +212,7 @@ function Home({roleId}) {
             copy path to clipboard
           </Button> */}
           <Button
-            sx={{ mr: 1 }}
+            sx={{ mr: 1, boxShadow: 0, borderRadius: "3px" }}
             onClick={() => setOpenShare(false)}
             color="rmuti"
             variant="contained"

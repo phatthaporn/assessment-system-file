@@ -136,7 +136,7 @@ function Password() {
             <Button
               color="success"
               variant="contained"
-              sx={{ mt: 3 }}
+              sx={{ mt: 3, boxShadow: 0, borderRadius: "3px" }}
               fullWidth
               onClick={resetPassword}
             >

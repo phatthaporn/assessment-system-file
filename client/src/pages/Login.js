@@ -183,13 +183,14 @@ function Login() {
               <Button
                 onClick={onClickLogin}
                 variant="contained"
+                sx={{ boxShadow: 0, borderRadius: "3px" }}
                 color="rmuti"
                 fullWidth
               >
                 เข้าสู่ระบบ
               </Button>
                 <Link to="/register" style={{ textDecoration: 'none', width: "100%" }}>
-                <Button variant="contained" color="primary" fullWidth>
+                <Button variant="contained" sx={{ boxShadow: 0, borderRadius: "3px" }} color="primary" fullWidth>
                   สมัครสมาชิก
                 </Button>
                 </Link>

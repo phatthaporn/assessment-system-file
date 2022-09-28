@@ -21,7 +21,7 @@ import SideBar from "../components/layout/sidebar";
 import { Outlet, Link } from "react-router-dom";
 import { useNavigate } from "react-router";
 
-const drawerWidth = 240;
+const drawerWidth = 220;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -38,9 +38,9 @@ const closedMixin = (theme) => ({
     duration: theme.transitions.duration.leavingScreen,
   }),
   overflowX: "hidden",
-  width: `calc(${theme.spacing(7)} + 1px)`,
+  width: `calc(${theme.spacing(0)} + 1px)`,
   [theme.breakpoints.up("sm")]: {
-    width: `calc(${theme.spacing(9)} + 1px)`,
+    width: `calc(${theme.spacing(7)} + 1px)`,
   },
 });
 

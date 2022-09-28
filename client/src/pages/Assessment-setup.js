@@ -42,6 +42,9 @@ function CreateAssessment() {
   const [conditions, setConditions] = useState([]);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [deleteId, setDeleteId] = useState("");
+  const [openCreateWithTemplate, setOpenCreateWithTemplate] = useState(false);
+  const [templateData, setTemplateData] = useState(false);
+  const [templateCondition, setTemplateCondition] = useState([]);
   const [openSnackbar, setOpenSnackbar] = useState({
     status: false,
     type: "",
@@ -191,6 +194,27 @@ function CreateAssessment() {
     }
   };
 
+  const handlerCreateWithTheplate = async (rowData) => {
+    setTemplateData(rowData);
+    setTemplateCondition(rowData.assessment_conditions)
+    setOpenCreateWithTemplate(true);
+  }
+
+  const createWithTemplate = async () => {
+    try {
+      const formData = {
+        title: templateData.title,
+        sub_title: templateData.sub_title,
+        conditions: templateCondition,
+        facultyMajorId
+      };
+      const { data } = await axios.post(`${hostname}/api/assessment/create`, formData);
+      console.log(data);
+    }catch(err) {
+      alert(err);
+    }
+  }
+
   useEffect(() => {
     getFaculty();
   }, []);
@@ -328,7 +352,7 @@ function CreateAssessment() {
                 }
               />
               <Button
-                sx={{ mt: 3 }}
+                sx={{ mt: 3, boxShadow: 0, borderRadius: "3px" }}
                 variant="contained"
                 color="success"
                 disabled={
@@ -405,25 +429,27 @@ function CreateAssessment() {
                   },
                   {
                     name: "",
-                    label: "จัดการ",
+                    label: "",
                     options: {
                       customBodyRenderLite: (dataIndex) => {
                         let rowData = assessment[dataIndex];
                         return (
-                          <>
+                          <Stack sx={{ display: "flex", flexDirection: { md: "row", xs: "column"}}}>
                             <Button
                               size="small"
                               color="warning"
                               variant="contained"
+                              sx={{ boxShadow: 0, borderRadius: "3px", mb: { xs: 0.5, md: 0 } }}
                               onClick={() => {
                                 editAssessmentOpen(rowData);
                               }}
                             >
                               <Edit fontSize="small" color="#FFFFFF" />
-                              แก้ไขแบบประเมิน
+                              แก้ไข
                             </Button>
+                            <Button size="small" sx={{ ml: {md: 1, xs: 0}, mb: { xs: 0.5, md: 0 }, boxShadow: 0, borderRadius: "3px" }} variant="contained" color="success" onClick={() => handlerCreateWithTheplate(rowData)}>สร้างจากแบบประเมิน</Button>
                             <Button
-                              sx={{ ml: 1 }}
+                              sx={{ ml: {md:1 , xs: 0}, boxShadow: 0, borderRadius: "3px", mb: { xs: 0.5, md: 0 } }}
                               size="small"
                               color="danger"
                               variant="contained"
@@ -435,7 +461,7 @@ function CreateAssessment() {
                               <DeleteIcon fontSize="small" />
                               ลบ
                             </Button>
-                          </>
+                          </Stack>
                         );
                       },
                     },
@@ -590,7 +616,7 @@ function CreateAssessment() {
               }}
             >
               <Button
-                sx={{ m: 2, mt: 6 }}
+                sx={{ m: 2, mt: 6, boxShadow: 0, borderRadius: "3px" }}
                 color="success"
                 variant="contained"
                 fullWidth
@@ -599,7 +625,7 @@ function CreateAssessment() {
                 บันทึกข้อมูล
               </Button>
               <Button
-                sx={{ mr: 1 }}
+                sx={{ mr: 1, boxShadow: 0, borderRadius: "3px" }}
                 onClick={() => setOpenConditionDialog(false)}
                 color="danger"
                 variant="contained"
@@ -823,7 +849,7 @@ function CreateAssessment() {
             }}
           >
             <Button
-              sx={{ m: 2, mt: 6 }}
+              sx={{ m: 2, mt: 6, boxShadow: 0, borderRadius: "3px" }}
               color="success"
               variant="contained"
               fullWidth
@@ -832,10 +858,239 @@ function CreateAssessment() {
               บันทึกข้อมูล
             </Button>
             <Button
-              sx={{ mr: 1 }}
+              sx={{ mr: 1, boxShadow: 0, borderRadius: "3px" }}
               onClick={() => setOpenEditDialog(false)}
               color="danger"
               variant="contained"
+              fullWidth
+            >
+              ยกเลิก
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={openCreateWithTemplate}
+          onClose={() =>{ 
+            setTemplateCondition([]);
+            setTemplateData([]);
+            setOpenCreateWithTemplate(false)
+          }}
+          fullWidth
+        >
+          <DialogTitle
+            sx={{ fontWeight: "Bold" }}
+          >
+            {"แก้ไขแบบประเมิน"}
+            <Typography
+              variant="caption"
+              sx={{
+                display: "flex",
+                justifyContent: "start",
+                color: "red",
+              }}
+            >
+              ตรวจสอบข้อมูลก่อนการยืนยันทุกครั้ง*
+            </Typography>
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              <Stack
+                direction="column"
+                spacing={3}
+                alignItems="center"
+                justifyContent="flex-start"
+                sx={{ mt: 1 }}
+              >
+                <Typography sx={{ mb: -3 }} variant="h6">
+                  หัวข้อ
+                </Typography>
+                <TextField
+                  value={templateData?.title}
+                  size="small"
+                  label="หัวข้อ"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  onChange={(e) =>
+                    setTemplateData({
+                      ...templateData,
+                      ["title"]: e.target.value,
+                    })
+                  }
+                />
+                <Typography variant="h6">รายละเอียด</Typography>
+                <TextareaAutosize
+                  value={templateData?.sub_title}
+                  minRows={20}
+                  size="small"
+                  variant="outlined"
+                  placeholder="รายละเอียด"
+                  style={{
+                    maxWidth: "100%",
+                    minWidth: "100%",
+                    maxHeight: 90,
+                    minHeight: 20,
+                  }}
+                  onChange={(e) =>
+                    setTemplateData({
+                      ...templateData,
+                      ["sub_title"]: e.target.value,
+                    })
+                  }
+                />
+              </Stack>
+              <>
+                <Stack
+                  alignItems="center"
+                  justifyContent="center"
+                  sx={{ my: 3 }}
+                >
+                  <Typography variant="h6">แบบประเมิน</Typography>
+                </Stack>
+                {templateCondition?.length !== 0 &&
+                  templateCondition?.map((item, index) => {
+                    return (
+                      <>
+                        <Stack
+                          direction="row"
+                          spacing={3}
+                          alignItems="center"
+                          justifyContent="flex-start"
+                          sx={{ mt: 3 }}
+                        >
+                          <TextField
+                            key={index}
+                            value={item.description}
+                            size="small"
+                            label="หัวข้อประเมิน"
+                            fullWidth
+                            onChange={(e) => {
+                              let items = [...templateCondition];
+                              items[index] = {
+                                ...items[index],
+                                description: e.target.value,
+                              };
+                              setTemplateCondition(items);
+                            }}
+                          />
+                          <AddCircleIcon
+                            sx={{ cursor: "pointer" }}
+                            color="primary"
+                            onClick={() => {
+                              let items = [...templateCondition];
+                              items[index].examinations.push({
+                                description: "",
+                              });
+                              setTemplateCondition(items);
+                            }}
+                          />
+                          <LibraryAddIcon
+                            sx={{ cursor: "pointer" }}
+                            color="success"
+                            onClick={() =>
+                              setTemplateCondition([
+                                ...templateCondition,
+                                {
+                                  description: "",
+                                  examinations: [{ description: "" }],
+                                },
+                              ])
+                            }
+                          />
+                          <DeleteIcon
+                            sx={{ cursor: "pointer" }}
+                            color="danger"
+                            onClick={() =>
+                              setTemplateCondition(
+                                templateCondition.filter(
+                                  (item, indexItem) => indexItem !== index
+                                )
+                              )
+                            }
+                          />
+                        </Stack>
+                        <Stack
+                          direction="column"
+                          spacing={2}
+                          justifyContent="flex-start"
+                        >
+                          {item?.examinations?.length !== 0 &&
+                            item?.examinations?.map((element, indexElement) => {
+                              return (
+                                <Stack direction="row" spacing={2}>
+                                  <Stack sx={{ mt: 2 }} direction="row">
+                                    <DeleteIcon
+                                      sx={{
+                                        mx: 2,
+                                        marginTop: "4px",
+                                        cursor: "pointer",
+                                      }}
+                                      color="danger"
+                                      onClick={() => {
+                                        let items = [...templateCondition];
+                                        items[index].examinations = items[index].examinations.filter((item, keyIndex) =>keyIndex !== indexElement);
+                                        setTemplateCondition(items);
+                                      }}
+                                    />
+                                    <Chip
+                                      label={`ข้อที่ ${indexElement + 1}`}
+                                      color="success"
+                                    />
+                                  </Stack>
+                                  <TextField
+                                    value={element.description}
+                                    size="small"
+                                    variant="standard"
+                                    label="ข้อประเมิน"
+                                    fullWidth
+                                    onChange={(e) => {
+                                      let items = [...templateCondition];
+                                      items[index].examinations[indexElement] =
+                                        {
+                                          ...items[index].examinations[
+                                            indexElement
+                                          ],
+                                          description: e.target.value,
+                                        };
+                                      setTemplateCondition(items);
+                                    }}
+                                  />
+                                </Stack>
+                              );
+                            })}
+                        </Stack>
+                      </>
+                    );
+                  })}
+              </>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Button
+              sx={{ m: 2, mt: 6, boxShadow: 0, borderRadius: "3px" }}
+              color="success"
+              variant="contained"
+              fullWidth
+              size="small"
+              onClick={() => createWithTemplate()}
+            >
+              สร้างแบบประเมินนี้
+            </Button>
+            <Button
+              sx={{ mr: 1, boxShadow: 0, borderRadius: "3px" }}
+              onClick={() => {
+                setTemplateCondition([]);
+                setTemplateData([]);
+                setOpenCreateWithTemplate(false);
+              }}
+              color="danger"
+              variant="contained"
+              size="small"
               fullWidth
             >
               ยกเลิก

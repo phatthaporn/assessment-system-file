@@ -302,7 +302,7 @@ function Approve() {
                     <Button
                       color="success"
                       variant="contained"
-                      sx={{ mt: 3 }}
+                      sx={{ mt: 3, boxShadow: 0, borderRadius: "3px" }}
                       fullWidth
                       onClick={() => sendApproveUser()}
                     >
@@ -311,7 +311,7 @@ function Approve() {
                     <Button
                       color="danger"
                       variant="contained"
-                      sx={{ mt: 1 }}
+                      sx={{ mt: 1, boxShadow: 0, borderRadius: "3px" }}
                       fullWidth
                       onClick={() => setOpenApproveDialog(false)}
                     >
@@ -342,7 +342,7 @@ function Approve() {
             >
               ยกเลิก
             </Button>
-            <Button onClick={deleteUser} color="danger" variant="contained">
+            <Button onClick={deleteUser} color="danger" variant="contained" sx={{ boxShadow: 0, borderRadius: "3px" }}>
               ตกลง
             </Button>
           </DialogActions>

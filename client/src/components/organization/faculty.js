@@ -121,6 +121,8 @@ function Faculty() {
           size="large"
           color="success"
           sx={{
+            boxShadow: 0,
+            borderRadius: "3px",
             mr: { md: "10px" },
             mt: { md: "15px", xs: "15px" },
             mb: { xs: "20px", md: "15px" },
@@ -250,6 +252,7 @@ function Faculty() {
             <Button
               color="success"
               variant="contained"
+              sx={{ boxShadow: 0, borderRadius: "3px" }}
               onClick={() => createFaculty()}
             >
               เพิ่มคณะ
@@ -293,6 +296,7 @@ function Faculty() {
           <Button
             color="success"
             variant="contained"
+            sx={{ boxShadow: 0, borderRadius: "3px" }}
             disabled={editFaculty.name === ""}
             onClick={() => updateFaculty()}
           >
@@ -319,6 +323,7 @@ function Faculty() {
             onClick={() => destroyFaculty()}
             color="danger"
             variant="contained"
+            sx={{ boxShadow: 0, borderRadius: "3px" }}
           >
             ตกลง
           </Button>

@@ -296,6 +296,7 @@ function Report() {
                             return (
                               <Button
                                 variant="contained"
+                                sx={{ boxShadow: 0, borderRadius: "3px" }}
                                 color="warning"
                                 size="small"
                                 onClick={() => openDetailDialog(rowData)}

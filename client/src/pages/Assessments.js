@@ -322,7 +322,7 @@ function Assessment() {
                   </Grid>
                 </Grid>
                 <Button
-                  sx={{ mt: 2 }}
+                  sx={{ mt: 2,boxShadow: 0, borderRadius: "3px" }}
                   color="success"
                   variant="contained"
                   disabled={
@@ -476,7 +476,7 @@ function Assessment() {
                       <Button
                         variant="contained"
                         color="danger"
-                        sx={{ width: { xs: "94%", md: "17vh" }, m: 1 }}
+                        sx={{ width: { xs: "94%", md: "17vh" }, m: 1, boxShadow: 0, borderRadius: "3px" }}
                         onClick={() => {
                           setConditionToPrevious();
                           setCurrentItems(currentItems - 1);
@@ -490,7 +490,7 @@ function Assessment() {
                       <Button
                         variant="contained"
                         color="primary"
-                        sx={{ width: { xs: "94%", md: "17vh" }, m: 1 }}
+                        sx={{ width: { xs: "94%", md: "17vh" }, m: 1, boxShadow: 0, borderRadius: "3px" }}
                         onClick={() => {
                           setConditionToNextPage();
                         }}
@@ -501,7 +501,7 @@ function Assessment() {
                       <Button
                         variant="contained"
                         color="success"
-                        sx={{ width: { xs: "94%", md: "17vh" }, m: 1 }}
+                        sx={{ width: { xs: "94%", md: "17vh" }, m: 1, boxShadow: 0, borderRadius: "3px" }}
                         onClick={() => {
                           sendAnswer();
                         }}
@@ -559,7 +559,7 @@ function Assessment() {
                 </Stack>
               </Grid>
               <Button
-                sx={{ mt: 2 }}
+                sx={{ mt: 2, boxShadow: 0, borderRadius: "3px" }}
                 color="rmuti"
                 variant="contained"
                 onClick={() => {
