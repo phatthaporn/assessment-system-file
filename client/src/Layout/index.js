@@ -249,7 +249,7 @@ export default function Layout({roleId}) {
         <DrawerHeader>
           <img
             src="/image/layout-logo.png"
-            style={{ width: "115px", height: "50px", marginRight: "60px" }}
+            style={{ width: "168px", height: "85px", marginRight: "-2px", marginTop: '-10px', marginBottom: '-10px' }}
           />
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (
