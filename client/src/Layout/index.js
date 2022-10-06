@@ -90,10 +90,13 @@ const Drawer = styled(MuiDrawer, {
 
 export default function Layout({roleId}) {
   const navigate = useNavigate();
+  const [dateState, setDateState] = React.useState(new Date());
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+
+  React.useEffect(() => setInterval(() => setDateState(new Date()), 1000), []);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -197,9 +200,22 @@ export default function Layout({roleId}) {
           </IconButton>
 
           <Typography noWrap component="div">
-            ระบบประเมินผลโครงการคณะวิศวกรรมศาสตร์
+            <b>ระบบประเมินผลโครงการคณะวิศวกรรมศาสตร์</b>
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
+          <b>
+              {`${dateState.toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })}-
+            ${dateState.toLocaleString("en-US", {
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+              second: "numeric",
+            })}`}
+            </b>
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
               size="large"

@@ -53,7 +53,6 @@ function Facultymajor() {
   const loadFaculty = async () => {
       try {
           const { data } = await axios.get(`${hostname}/api/faculty/get-all`);
-          console.log(data.result)
           if(data.status === "success") {
               setFaculty(data.result);
               setOpenAddFacultymajor(true);
@@ -63,7 +62,6 @@ function Facultymajor() {
 
   const createFacultymajor = async () => {
     try {
-        console.log(addFacultymajor.name)
       const { data } = await axios.post(
         `${hostname}/api/faculty-major/create`,
         {
@@ -89,7 +87,6 @@ function Facultymajor() {
 
   const updateFacultymajor = async () => {
     try {
-        console.log(editFacultymajor.name)
       const { data } = await axios.put(
         `${hostname}/api/faculty-major/update/${editFacultymajor.id}`,
         {

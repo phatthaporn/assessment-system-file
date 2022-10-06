@@ -33,7 +33,6 @@ function Password() {
   };
 
   const handleChange = (prop) => (event) => {
-    console.log(password);
     setPassword({ ...password, [prop]: event.target.value });
   };
 

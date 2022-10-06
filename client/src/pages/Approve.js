@@ -136,7 +136,6 @@ function Approve() {
       <Box sm={{ display: "flex", flexDirection: "row", alignItems: "start" }}>
         <Breadcrumbs
           aria-label="breadcrumb"
-          onClick={() => console.log(allUser)}
         >
           <>จัดการผู้ใช้งานระบบ</>
         </Breadcrumbs>
@@ -236,7 +235,6 @@ function Approve() {
         >
           <DialogTitle
             sx={{ fontWeight: "Bold" }}
-            onClick={() => console.log(selectUser)}
           >
             {"จัดการสิทธิ์ผู้ใช้งาน"}
             <Typography

@@ -105,7 +105,6 @@ const Routes = () => {
     const profile = JSON.parse(localStorage.getItem("USER_PROFILE"));
     const children = getPathFormRole(profile?.roleId);
 
-    // console.log(window.location.pathname.split("/assessment")[1] === undefined)
 
     return [
         {

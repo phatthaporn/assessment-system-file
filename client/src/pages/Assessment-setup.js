@@ -209,7 +209,6 @@ function CreateAssessment() {
         facultyMajorId
       };
       const { data } = await axios.post(`${hostname}/api/assessment/create`, formData);
-      console.log(data);
     }catch(err) {
       alert(err);
     }
@@ -643,12 +642,6 @@ function CreateAssessment() {
         >
           <DialogTitle
             sx={{ fontWeight: "Bold" }}
-            onClick={() =>
-              console.log({
-                assessment: editAssessment,
-                condition: editCondition,
-              })
-            }
           >
             {"แก้ไขแบบประเมิน"}
             <Typography

@@ -38,7 +38,6 @@ const compareData = (data, hash) => {
                 resolve(match)
             })
         } catch (error) {
-            console.log(error)
             resolve(data)
         }
     })

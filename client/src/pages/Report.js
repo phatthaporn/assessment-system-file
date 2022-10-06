@@ -18,6 +18,8 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { hostname } from "../hostname";
 import { PieChart } from "../components/report/pie-chart";
+import * as XLSX from "xlsx";
+import moment from "moment";
 import MUIDataTable from "mui-datatables";
 
 function Report() {
@@ -29,6 +31,7 @@ function Report() {
   const [detailDialog, setDetailDialog] = useState(false);
   const [pieChartData, setPieChartData] = useState([0, 0, 0]);
   const [average, setAverage] = useState([]);
+  const [excel, setExcel] = useState([]);
 
   const getAssessment = async () => {
     try {
@@ -48,28 +51,30 @@ function Report() {
         `${hostname}/api/assessment/report-by-id/${id}`
       );
       if (data.status === "success") {
-        if(data.result.length !== 0) {
+        if (data.result.length !== 0) {
+          setExcel(data.result);
           let point_average = [];
           let items = [];
           let answer = [];
-          for(let i = 0; i < data.result.length; i++) {
+          for (let i = 0; i < data.result.length; i++) {
             let el = data.result[i];
             for (let j = 0; j < data.result[0].points.length; j++) {
               let element = el.points[j];
-              await items.push({...element, index: j});
+              await items.push({ ...element, index: j });
             }
           }
-          for(let i = 0; i < data.result[0].points.length; i++) {
-            let filteredData = await items.filter((item) => item.index == i)
+          for (let i = 0; i < data.result[0].points.length; i++) {
+            let filteredData = await items.filter((item) => item.index == i);
             await answer.push(filteredData);
           }
-          console.log(answer)
           await answer.forEach((el) => {
             let avg = el.reduce((r, c) => r + c.point, 0);
-            point_average.push({ average: avg / data.result.length, description: el[0].description });
-          })
+            point_average.push({
+              average: avg / data.result.length,
+              description: el[0].description,
+            });
+          });
           setAverage(point_average);
-          console.log(point_average)
         }
         let pieData = [0, 0, 0];
         await data.result.forEach((element) => {
@@ -88,11 +93,34 @@ function Report() {
         setPieChartData(pieData);
         setHistory(data.result);
         setOpenChart(true);
-       
       }
     } catch (err) {
       alert(err.message);
     }
+  };
+
+  const downloadExcel = async () => {
+    let fileName = await assessment.find(item => item.id === selectAssessment).title;
+    let pointThai = ["แย่", "ปรับปรุง", "พอใช้", "มาตราฐาน", "ดี", "ดีเยี่ยม"];
+    let jsonFile = [];
+    for (let item of excel) {
+      let objectInJson = {};
+      await item.points.forEach(async (el) => {
+        objectInJson[el.description] = `${el.point} คะแนน (${
+          pointThai[el.point]
+        })`;
+      });
+      await jsonFile.push({
+        ["time-stamp"]: `${moment(item.createdAt).format("DD/MM/YYYY HH:mm")} น.`,
+        ["เพศ"]: item.gender,
+        ["อายุ"]: `${item.age} ปี`,
+        ...objectInJson,
+      });
+    }
+    const worksheet = await XLSX.utils.json_to_sheet(jsonFile);
+    const workbook = await XLSX.utils.book_new();
+    await XLSX.utils.book_append_sheet(workbook, worksheet);
+    await XLSX.writeFile(workbook, `${fileName}-${Date.now().toString()}.xlsx`);
   };
 
   const openDetailDialog = async (data) => {
@@ -137,17 +165,34 @@ function Report() {
                 flexDirection: "column",
               }}
             >
-              <Typography
-                variant="h6"
+              <Stack
                 sx={{
-                  fontWeight: "bold",
                   display: "flex",
-                  justifyContent: "center",
-                  marginBottom: "20px",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
                 }}
               >
-                สรุปผลการประเมิน
-              </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: "bold",
+                    display: "flex",
+                    marginBottom: "20px",
+                  }}
+                >
+                  สรุปผลการประเมิน
+                </Typography>
+                <Button
+                  disabled={!openChart}
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  sx={{ height: "35px", boxShadow: 0, borderRadius: "3px" }}
+                  onClick={downloadExcel}
+                >
+                  <b>EXCEL REPORT</b>
+                </Button>
+              </Stack>
               <TextField
                 value={selectAssessment}
                 size="small"
@@ -168,7 +213,7 @@ function Report() {
               </TextField>
               {openChart ? (
                 <>
-                  <Grid container>
+                  <Grid container sx={{ mb: 2 }}>
                     <Grid item xs={12} md={6}>
                       <Stack sx={{ mt: 2 }}>
                         <Stack
@@ -177,7 +222,7 @@ function Report() {
                             justifyContent: "center",
                             alignItems: "center",
                             width: "100%",
-                            height: {md: "300px", xs: "140px", sm: "200px"},
+                            height: { md: "300px", xs: "140px", sm: "200px" },
                           }}
                         >
                           <PieChart point={pieChartData} />
@@ -191,55 +236,67 @@ function Report() {
                             mb: 5,
                           }}
                         >
-                           {`ผู้ประเมินทั้งหมด ${history.length} คน`}
+                          {`ผู้ประเมินทั้งหมด ${history.length} คน`}
                         </Typography>
                       </Stack>
                     </Grid>
                     <Grid item xs={12} md={6}>
-                      <Stack sx={{ mt: {md: 2, xs: 0}, mb: { xs: 2, md: 0} }}>
+                      <Stack
+                        sx={{ mt: { md: 2, xs: 0 }, mb: { xs: 2, md: 0 } }}
+                      >
                         <MUIDataTable
-                        title={"การประเมิน"}
-                        data={average}
-                        options={{
-                          viewColumns: false,
-                          filter: false,
-                          print: false,
-                          download: false,
-                          search: false,
-                          pagination: true,
-                          selectableRows: false,
-                          rowsPerPage: 3,
-                          rowsPerPageOptions: [3, 6, 9, 12],
-                          textLabels: {
-                            body: {
-                              noMatch: "ไม่พบข้อมูล",
+                          title={"การประเมิน"}
+                          data={average}
+                          options={{
+                            viewColumns: false,
+                            filter: false,
+                            print: false,
+                            download: false,
+                            search: false,
+                            pagination: true,
+                            selectableRows: false,
+                            rowsPerPage: 3,
+                            rowsPerPageOptions: [3, 6, 9, 12],
+                            textLabels: {
+                              body: {
+                                noMatch: "ไม่พบข้อมูล",
+                              },
                             },
-                          },
-                        }}
-                        columns={[
-                          {
-                            name: "description",
-                            label: "คำถาม"
-                          },
-                          {
-                            name: "average",
-                            label: "คะแนนเฉลี่ย",
-                            options: {
-                              customBodyRender: value => <Typography variant="subtitle2" sx={{ color: value < 3 ? "red" : "green"}}>{`${parseFloat(value).toFixed(2)} คะแนน`}</Typography>
-                            }
-                          },
-                          {
-                            name: "average",
-                            label: "เปอร์เซ็น",
-                            options: {
-                              customBodyRender: value => {
-                                let percent =  (value/5) * 100;
-                                return <Typography variant="subtitle2">{`${parseFloat(percent).toFixed(2)} %`}</Typography>
-                              }
-                            }
-                          },
-
-                        ]}
+                          }}
+                          columns={[
+                            {
+                              name: "description",
+                              label: "คำถาม",
+                            },
+                            {
+                              name: "average",
+                              label: "คะแนนเฉลี่ย",
+                              options: {
+                                customBodyRender: (value) => (
+                                  <Typography
+                                    variant="subtitle2"
+                                    sx={{ color: value < 3 ? "red" : "green" }}
+                                  >{`${parseFloat(value).toFixed(
+                                    2
+                                  )} คะแนน`}</Typography>
+                                ),
+                              },
+                            },
+                            {
+                              name: "average",
+                              label: "เปอร์เซ็น",
+                              options: {
+                                customBodyRender: (value) => {
+                                  let percent = (value / 5) * 100;
+                                  return (
+                                    <Typography variant="subtitle2">{`${parseFloat(
+                                      percent
+                                    ).toFixed(2)} %`}</Typography>
+                                  );
+                                },
+                              },
+                            },
+                          ]}
                         />
                       </Stack>
                     </Grid>
@@ -319,9 +376,7 @@ function Report() {
           onClose={() => setDetailDialog(false)}
           fullWidth
         >
-          <DialogTitle sx={{ fontWeight: "Bold" }}>
-            {"รายละเอียด"}
-          </DialogTitle>
+          <DialogTitle sx={{ fontWeight: "Bold" }}>{"รายละเอียด"}</DialogTitle>
           <DialogContent>
             <DialogContentText>
               <Grid container sx={{ mt: "2%" }}>

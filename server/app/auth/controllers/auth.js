@@ -83,7 +83,6 @@ router.get("/get-unapprove", async (req, res) => {
 
 router.post("/approve/:id", async (req, res) => {
   try {
-    console.log(req.user);
     const response = await Users.update(
       { status: 1,roleId: req.body.roleId, approvedBy: req.user.email },
       { where: { id: req.params.id } }

@@ -1,8 +1,6 @@
 const { Sequelize } = require("sequelize");
 const { host_postgres, config_postgres } = require("../connection/setup-sequelize");
 
-console.log(host_postgres);
-
 const sequelize = new Sequelize(host_postgres, config_postgres);
 
 const db = {};

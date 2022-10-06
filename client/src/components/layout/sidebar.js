@@ -15,43 +15,43 @@ function Sidebar({ roleId }) {
         <ListItemIcon>
           <HomeIcon color="rmuti" titleAccess="หน้าหลัก" />
         </ListItemIcon>
-        <ListItemText sx={{ color: "#982d07" }} primary="หน้าหลัก" />
+        <ListItemText sx={{ color: "#982d07" }} primaryTypographyProps={{ fontSize: "14px", fontWeight: "bold" }} primary="หน้าหลัก" />
       </ListItem>
       <ListItem button component={Link} to="/assessment">
         <ListItemIcon>
           <LibraryAddCheckIcon color="rmuti" titleAccess="แบบประเมินทั้งหมด" />
         </ListItemIcon>
-        <ListItemText sx={{ color: "#982d07" }} primary="แบบประเมินทั้งหมด" />
+        <ListItemText sx={{ color: "#982d07" }} primaryTypographyProps={{ fontSize: "14px", fontWeight: "bold" }} primary="แบบประเมินทั้งหมด" />
       </ListItem>
       <ListItem button component={Link} to="/assessment-setup">
         <ListItemIcon>
           <NoteAddIcon color="rmuti" titleAccess="สร้างแบบประเมิน" />
         </ListItemIcon>
-        <ListItemText sx={{ color: "#982d07" }} primary="สร้างแบบประเมิน" />
+        <ListItemText sx={{ color: "#982d07" }} primaryTypographyProps={{ fontSize: "14px", fontWeight: "bold" }} primary="สร้างแบบประเมิน" />
       </ListItem>
       <ListItem button component={Link} to="/report">
         <ListItemIcon>
           <AutoGraphIcon color="rmuti" titleAccess="สรุปผลการประเมิน" />
         </ListItemIcon>
-        <ListItemText sx={{ color: "#982d07" }} primary="สรุปผลการประเมิน" />
+        <ListItemText sx={{ color: "#982d07" }} primaryTypographyProps={{ fontSize: "14px", fontWeight: "bold" }} primary="สรุปผลการประเมิน" />
       </ListItem>
       <ListItem button component={Link} to="/organization">
         <ListItemIcon>
           <CorporateFareIcon color="rmuti" titleAccess="จัดการข้อมูลทั่วไป" />
         </ListItemIcon>
-        <ListItemText sx={{ color: "#982d07" }} primary="จัดการข้อมูลทั่วไป" />
+        <ListItemText sx={{ color: "#982d07" }} primaryTypographyProps={{ fontSize: "14px", fontWeight: "bold" }} primary="จัดการข้อมูลทั่วไป" />
       </ListItem>
       <ListItem button component={Link} to="/approve">
         <ListItemIcon>
           <HowToRegIcon color="rmuti" titleAccess="จัดการผู้ใช้งาน" />
         </ListItemIcon>
-        <ListItemText sx={{ color: "#982d07" }} primary="จัดการผู้ใช้งาน" />
+        <ListItemText sx={{ color: "#982d07" }} primaryTypographyProps={{ fontSize: "14px", fontWeight: "bold" }} primary="จัดการผู้ใช้งาน" />
       </ListItem>
       <ListItem button component={Link} to="/password">
         <ListItemIcon>
           <LockIcon color="rmuti" titleAccess="เปลี่ยนรหัสผ่าน" />
         </ListItemIcon>
-        <ListItemText sx={{ color: "#982d07" }} primary="เปลี่ยนรหัสผ่าน" />
+        <ListItemText sx={{ color: "#982d07" }} primaryTypographyProps={{ fontSize: "14px", fontWeight: "bold" }} primary="เปลี่ยนรหัสผ่าน" />
       </ListItem>
     </List>
   ) : (
@@ -61,31 +61,31 @@ function Sidebar({ roleId }) {
         <ListItemIcon>
           <HomeIcon color="rmuti" titleAccess="หน้าหลัก" />
         </ListItemIcon>
-        <ListItemText sx={{ color: "#982d07" }} primary="หน้าหลัก" />
+        <ListItemText sx={{ color: "#982d07" }} primaryTypographyProps={{ fontSize: "14px", fontWeight: "bold" }} primary="หน้าหลัก" />
       </ListItem>
       <ListItem button component={Link} to="/assessment">
         <ListItemIcon>
           <LibraryAddCheckIcon color="rmuti" titleAccess="แบบประเมินของฉัน" />
         </ListItemIcon>
-        <ListItemText sx={{ color: "#982d07" }} primary="แบบประเมินของฉัน" />
+        <ListItemText sx={{ color: "#982d07" }} primaryTypographyProps={{ fontSize: "14px", fontWeight: "bold" }} primary="แบบประเมินของฉัน" />
       </ListItem>
       <ListItem button component={Link} to="/assessment-setup">
         <ListItemIcon>
           <NoteAddIcon color="rmuti" titleAccess="สร้างแบบประเมิน" />
         </ListItemIcon>
-        <ListItemText sx={{ color: "#982d07" }} primary="สร้างแบบประเมิน" />
+        <ListItemText sx={{ color: "#982d07" }} primaryTypographyProps={{ fontSize: "14px", fontWeight: "bold" }} primary="สร้างแบบประเมิน" />
       </ListItem>
       <ListItem button component={Link} to="/report">
         <ListItemIcon>
           <AutoGraphIcon color="rmuti" titleAccess="สรุปผลการประเมิน" />
         </ListItemIcon>
-        <ListItemText sx={{ color: "#982d07" }} primary="สรุปผลการประเมิน" />
+        <ListItemText sx={{ color: "#982d07" }} primaryTypographyProps={{ fontSize: "14px", fontWeight: "bold" }} primary="สรุปผลการประเมิน" />
       </ListItem>
       <ListItem button component={Link} to="/password">
         <ListItemIcon>
           <LockIcon color="rmuti" titleAccess="เปลี่ยนรหัสผ่าน" />
         </ListItemIcon>
-        <ListItemText sx={{ color: "#982d07" }} primary="เปลี่ยนรหัสผ่าน" />
+        <ListItemText sx={{ color: "#982d07" }} primaryTypographyProps={{ fontSize: "14px", fontWeight: "bold" }} primary="เปลี่ยนรหัสผ่าน" />
       </ListItem>
     </List>
   );
