@@ -332,6 +332,9 @@ function Report() {
                             filter: false,
                             print: false,
                             download: true,
+                            downloadOptions: {
+                              filename: `${assessment.find(item => item.id === selectAssessment).title}-${new Date().toDateString()}`,
+                            },
                             search: false,
                             pagination: true,
                             selectableRows: false,
