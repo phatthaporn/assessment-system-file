@@ -12,12 +12,14 @@ import {
   Button,
   LinearProgress,
   Switch,
+  TextareaAutosize,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { hostname } from "../hostname";
 import { useParams } from "react-router";
+import Snackbar from "../utils/Snackbar";
 
 function Assessment() {
   const { id } = useParams();
@@ -36,6 +38,14 @@ function Assessment() {
   const [pageStatus, setPageStatus] = useState(1);
   const [currentItems, setCurrentItems] = useState(0);
   const [age, setAge] = useState([]);
+  const [recomendId, setRecomendId] = useState("");
+  const [recomendSended, setRecomendSended] = useState(false);
+  const [recomend, setRecomend] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState({
+    status: false,
+    type: "",
+    msg: "",
+  });
 
   function isValidEmail(email) {
     return /\S+@\S+\.\S+/.test(email);
@@ -139,11 +149,30 @@ function Assessment() {
       );
       if (data.status === "success") {
         setPageStatus(3);
+        setRecomendId(data.result.id);
       }
     } catch (err) {
       alert(err);
     }
   };
+
+  const sendRecomend = async () => {
+    try {
+      console.log(recomend)
+      console.log(recomendId)
+      const { data } = await axios.put(`${hostname}/api/assessment/send-recomend/${recomendId}`, { recomend });
+      if(data.status === "success") {
+        setRecomendSended(true);
+        setOpenSnackbar({
+          status: true,
+          type: "success",
+          msg: "ขอบคุณสำหรับข้อเสนอแนะ",
+        });
+      }
+    }catch(err) {
+      alert(err);
+    }
+  }
 
   const handleAnswer = async (answer, index) => {
     let item = [...conditions];
@@ -558,6 +587,24 @@ function Assessment() {
                   </Typography>
                 </Stack>
               </Grid>
+              <Stack sx={{ display: "flex", flexDirection: "column", justifyContent: "center", mt: 2}}>
+                <Stack sx={{ justifyContent: "end"}}><Typography variant="subtitle2" sx={{ color: "red" }}>ไม่จำเป็นต้องกรอกก็ได้ *</Typography></Stack>
+                <TextareaAutosize size="small"
+                onChange={(e) => setRecomend(e.target.value)}
+                disabled={recomendSended}
+                variant="outlined"
+                placeholder="ข้อเสนอแนะ"
+                style={{
+                  maxWidth: "100%",
+                  minWidth: "100%",
+                  maxHeight: 200,
+                  minHeight: 75,
+                  fontFamily: "kanit",
+                  borderColor: "#C1C1C1",
+                  borderRadius: "3px",
+                }}/>
+                <Button variant="contained" sx={{ mt: 2}} disabled={recomend === "" || recomendSended} onClick={sendRecomend}>ส่งคำตอบ</Button>
+              </Stack>
               <Button
                 sx={{ mt: 2, boxShadow: 0, borderRadius: "3px" }}
                 color="rmuti"
@@ -573,6 +620,7 @@ function Assessment() {
           ) : null}
         </Box>
       </Box>
+      <Snackbar values={openSnackbar} setValues={setOpenSnackbar} />
     </>
   );
 }

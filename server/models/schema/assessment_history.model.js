@@ -19,6 +19,9 @@ module.exports = (sequelize, Sequelize) => {
     points: {
       type: Sequelize.ARRAY(Sequelize.JSON),
     },
+    recommend: {
+      type: Sequelize.TEXT,
+    },
     total_points: {
       type: Sequelize.INTEGER,
     },

@@ -178,6 +178,7 @@ const saveAnswer = async (answer, detail, id) => {
       gender: detail.gender,
       age: detail.age,
       points: points,
+      recommend: detail.recommend,
       total_points: total_points,
       assessmentId: id,
     });
@@ -251,6 +252,17 @@ const reportById = async (id) => {
   }
 };
 
+const updateRecomend = async (recommend, id) => {
+  try {
+    const result = await AssessmentHistories.update({ recommend },{
+      where: { id }
+    });
+    return { status: "success", result };
+  }catch(err) {
+    return err;
+  }
+}
+
 module.exports = {
   getAll,
   getByFacultyMajor,
@@ -263,4 +275,5 @@ module.exports = {
   homeInfo,
   reportById,
   setPublish,
+  updateRecomend
 };

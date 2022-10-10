@@ -111,6 +111,20 @@ router.post('/send-answer/:id', body("answer").notEmpty(), body("detail").notEmp
   }
 });
 
+router.put('/send-recomend/:id', body("recomend").notEmpty(), async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.status(400).json({ errors: errors.array() });
+    return;
+  }
+  try {
+    const response = await query.updateRecomend(req.body.recomend, req.params.id);
+    res.json(response);
+  }catch(err) {
+    res.status(500).json(err.message);
+  }
+})
+
 router.get('/home-info', async (req, res) => {
   try {
     const response = await query.homeInfo(req.user.roleId, req.user.id)
