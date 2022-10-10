@@ -69,11 +69,22 @@ function Report() {
           }
           await answer.forEach((el) => {
             let avg = el.reduce((r, c) => r + c.point, 0);
+            let sd = [];
+            let sum = 0.0;
+            for(let item of el) {
+              let xBar = (item.point - (avg / el.length)) * (item.point - (avg / el.length));
+              sd.push(xBar);
+            }
+            sum = sd.reduce((r, c) => r + c, 0)
+            console.log(Math.sqrt(sum))
             point_average.push({
-              average: avg / data.result.length,
+              average: parseFloat(avg / data.result.length).toFixed(2),
+              percentage: parseFloat((avg / (el.length * 5)) * 100).toFixed(2),
               description: el[0].description,
+              sd: parseFloat(Math.sqrt(sum)).toFixed(5)
             });
           });
+
           setAverage(point_average);
         }
         let pieData = [0, 0, 0];
@@ -245,63 +256,6 @@ function Report() {
                         sx={{ mt: { md: 2, xs: 0 }, mb: { xs: 2, md: 0 } }}
                       >
                         <MUIDataTable
-                          title={"การประเมิน"}
-                          data={average}
-                          options={{
-                            viewColumns: false,
-                            filter: false,
-                            print: false,
-                            download: false,
-                            search: false,
-                            pagination: true,
-                            selectableRows: false,
-                            rowsPerPage: 3,
-                            rowsPerPageOptions: [3, 6, 9, 12],
-                            textLabels: {
-                              body: {
-                                noMatch: "ไม่พบข้อมูล",
-                              },
-                            },
-                          }}
-                          columns={[
-                            {
-                              name: "description",
-                              label: "คำถาม",
-                            },
-                            {
-                              name: "average",
-                              label: "คะแนนเฉลี่ย",
-                              options: {
-                                customBodyRender: (value) => (
-                                  <Typography
-                                    variant="subtitle2"
-                                    sx={{ color: value < 3 ? "red" : "green" }}
-                                  >{`${parseFloat(value).toFixed(
-                                    2
-                                  )} คะแนน`}</Typography>
-                                ),
-                              },
-                            },
-                            {
-                              name: "average",
-                              label: "เปอร์เซ็น",
-                              options: {
-                                customBodyRender: (value) => {
-                                  let percent = (value / 5) * 100;
-                                  return (
-                                    <Typography variant="subtitle2">{`${parseFloat(
-                                      percent
-                                    ).toFixed(2)} %`}</Typography>
-                                  );
-                                },
-                              },
-                            },
-                          ]}
-                        />
-                      </Stack>
-                    </Grid>
-                  </Grid>
-                  <MUIDataTable
                     title={"ผู้ประเมิน"}
                     data={history}
                     options={{
@@ -319,7 +273,7 @@ function Report() {
                     columns={[
                       {
                         name: "detail",
-                        label: "อีเมลผู้ประเมิน",
+                        label: "ผู้ประเมิน",
                       },
                       {
                         name: "gender",
@@ -366,6 +320,61 @@ function Report() {
                       },
                     ]}
                   />
+                      </Stack>
+                    </Grid>
+                  </Grid>
+                  
+                  <MUIDataTable
+                          title={"การประเมิน"}
+                          data={average}
+                          options={{
+                            viewColumns: false,
+                            filter: false,
+                            print: false,
+                            download: true,
+                            search: false,
+                            pagination: true,
+                            selectableRows: false,
+                            rowsPerPage: 3,
+                            rowsPerPageOptions: [3, 6, 9, 12],
+                            textLabels: {
+                              body: {
+                                noMatch: "ไม่พบข้อมูล",
+                              },
+                            },
+                          }}
+                          columns={[
+                            {
+                              name: "description",
+                              label: "คำถาม",
+                            },
+                            {
+                              name: "average",
+                              label: "ค่าเฉลี่ย",
+                              options: {
+                                customBodyRender: (value) => (
+                                  <Typography
+                                    variant="subtitle2"
+                                    sx={{ color: value < 3 ? "red" : "green" }}
+                                  >{`${parseFloat(value).toFixed(
+                                    2
+                                  )} คะแนน`}</Typography>
+                                ),
+                              },
+                            },
+                            {
+                              name: "percentage",
+                              label: "ร้อยละ",
+                              options: {
+                                customBodyRender: value => <Typography variant="subtitle2" sx={{ color: value < 50 ? "red" : "green" }}>{`${parseFloat(value).toFixed(2)} %`}</Typography>
+                              }
+                            },
+                            {
+                              name: "sd",
+                              label: "ส่วนเบียงเบนมาตราฐาน",
+                            },
+                          ]}
+                        />
                 </>
               ) : null}
             </Box>
